@@ -12,10 +12,10 @@ with open("../RawData/accession_sra.tsv", "r") as infile:
 
 for key, value in data.items():
     os.makedirs("../ProcessedData/" + key)
-    fastqs = glob("./" + key + "*/*.fastq.gz")
+    fastqs = glob("./" + data[key][1] + "*/*.fastq.gz")
     for i in fastqs:
         trailing = i.split("/")[-1]
-        os.rename(i, str("../ProcessedData/" + key + "/" + trailing))
+        os.rename(i, str("../ProcessedData/" + data[key][1] + "/" + trailing))
 
 for i in glob("./SRR*"):
     if not os.listdir(i):
