@@ -62,7 +62,7 @@ if [ ! $(command -v pigz) ]; then
 fi
 
 if [ $fastq == false ]; then
-    while read acc; do
+    while read acc name ident; do
 	[[ -z $acc ]] && continue
 	printf "Downloading ${acc} from NCBI\n"
 	prefix=${acc:0:6}
@@ -94,7 +94,7 @@ if [ $fastq == false ]; then
     done
 else
     # Downloading from the ENA
-    while read acc; do
+    while read acc name ident; do
 	dl=false
 	[[ -z $acc ]] && continue
         printf "Downloading ${acc} from EBI\n"
