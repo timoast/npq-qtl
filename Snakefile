@@ -76,7 +76,7 @@ rule map:
         read2="ProcessedData/{sample}/{sample}_2_trim.fq.gz"
     output:
         kbs="ProcessedData/{sample}/{sample}_unsort_kbs.bam",
-        tai10="ProcessedData/{sample}/{sample}_unsort_tair10.bam"
+        tair10="ProcessedData/{sample}/{sample}_unsort_tair10.bam"
     threads: 20
     shell:
         """
@@ -93,10 +93,10 @@ rule sort:
     """ sort reads """
     input:
         kbs="ProcessedData/{sample}/{sample}_unsort_kbs.bam",
-        tai10="ProcessedData/{sample}/{sample}_unsort_tair10.bam"
+        tair10="ProcessedData/{sample}/{sample}_unsort_tair10.bam"
     output:
         kbs="ProcessedData/{sample}/{sample}_kbs.bam",
-        tai10="ProcessedData/{sample}/{sample}_tair10.bam"
+        tair10="ProcessedData/{sample}/{sample}_tair10.bam"
     threads: 20
     shell:
         """
@@ -110,10 +110,10 @@ rule region:
         region_kbs="RawData/npq_kbs.bed",
         region_tair10="RawData/npq_tair10.bed",
         kbs="ProcessedData/{sample}/{sample}_kbs.bam",
-        tai10="ProcessedData/{sample}/{sample}_tair10.bam"
+        tair10="ProcessedData/{sample}/{sample}_tair10.bam"
     output:
         kbs="ProcessedData/{sample}/{sample}_kbs_npq.bam",
-        tai10="ProcessedData/{sample}/{sample}_tair10_npq.bam"
+        tair10="ProcessedData/{sample}/{sample}_tair10_npq.bam"
     shell:
         """
         samtools view -b {input.kbs} {input.region_kbs} > {output.kbs}
@@ -124,10 +124,10 @@ rule coverage:
     """ compute coverage over NPQ region """
     input:
         kbs="ProcessedData/{sample}/{sample}_kbs_npq.bam",
-        tai10="ProcessedData/{sample}/{sample}_tair10_npq.bam"
+        tair10="ProcessedData/{sample}/{sample}_tair10_npq.bam"
     output:
         kbs="ProcessedData/{sample}/{sample}_kbs_npq.bw",
-        tai10="ProcessedData/{sample}/{sample}_tair10_npq.bw"
+        tair10="ProcessedData/{sample}/{sample}_tair10_npq.bw"
     threads: 20
     shell:
         """
