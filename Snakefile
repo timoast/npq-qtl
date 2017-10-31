@@ -28,7 +28,7 @@ rule trim:
         read2="ProcessedData/{sample}/{sample}_2_trim.fq",
         se1="ProcessedData/{sample}/{sample}_1_se.fq",
         se2="ProcessedData/{sample}/{sample}_2_se.fq"
-    threads = 10
+    threads: 10
     shell:
         """
         /usr/bin/java -jar /home/san/tstuart/tools/Trimmomatic-0.36/trimmomatic-0.36.jar PE \
@@ -56,6 +56,7 @@ rule compress:
         """
         pigz -p {threads} {input}
         """
+
 rule qc:
     """ run fastqc """
     input:
@@ -67,6 +68,7 @@ rule qc:
         """
         fastqc -t 4 {input}
         """
+
 rule map:
     """ align reads """
     input:
