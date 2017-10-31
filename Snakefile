@@ -35,7 +35,7 @@ rule trim:
           -threads {threads} \
           {input.read1} {input.read2} \
           {output.read1} {output.se1} {output.read1} {output.se2} \
-          ILLUMINACLIP:/home/san/tstuart/tools/Trimmomatic-0.36/adapters/NexteraPE-PE.fa:2:30:10 \
+          ILLUMINACLIP:/home/san/tstuart/tools/Trimmomatic-0.36/adapters/TruSeq2-PE.fa:2:30:10 \
           LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36
         """
 
