@@ -166,6 +166,6 @@ rule region:
         samtools index {output.kbs_bam}
         samtools index {output.tair10_bam}
 
-        bedtools intersect -a {input.kbs_bg} -b contig1:900000-950000 > {output.kbs_bg}
-        bedtools intersect -a {input.tair10_bg} -b 1:16851824-16891823 > {output.tair10_bg}
+        bedtools intersect -a {input.kbs_bg} -b RawData/npq_kbs.bed > {output.kbs_bg}
+        bedtools intersect -a {input.tair10_bg} -b RawData/npq_tair10.bed > {output.tair10_bg}
         """
