@@ -15,7 +15,7 @@ rule download:
     shell:
         """
         ./code/download_from_sra.sh -f ./RawData/accession_sra.tsv -p 10 -q
-        python3 ./code/rename_files.py
+        python3 ./code/move_sra_files.py
         """
 
 rule trim:
