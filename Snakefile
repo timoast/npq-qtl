@@ -104,6 +104,18 @@ rule sort:
         samtools sort -@ {threads} -T temp -O bam {input.tair10} -o {output.tair10}
         """
 
+rule cleanup:
+    """ remove unsorted bams if sorted bam present """
+    input:
+        "ProcessedData/{sample}/{sample}_kbs.bam",
+        "ProcessedData/{sample}/{sample}_tair10.bam",
+        kbs="ProcessedData/{sample}/{sample}_unsort_kbs.bam",
+        tair10="ProcessedData/{sample}/{sample}_unsort_tair10.bam"
+    shell:
+        """
+        rm {input.kbs} {input.tair10}
+        """
+
 rule region:
     """ extract the NPQ region """
     input:
