@@ -135,8 +135,6 @@ rule region:
     input:
         "ProcessedData/{sample}/{sample}_kbs.bam.bai",
         "ProcessedData/{sample}/{sample}_tair10.bam.bai",
-        region_kbs="RawData/npq_kbs.bed",
-        region_tair10="RawData/npq_tair10.bed",
         kbs="ProcessedData/{sample}/{sample}_kbs.bam",
         tair10="ProcessedData/{sample}/{sample}_tair10.bam"
     output:
@@ -144,8 +142,8 @@ rule region:
         tair10="ProcessedData/{sample}/{sample}_tair10_npq.bam"
     shell:
         """
-        samtools view -b {input.kbs} {input.region_kbs} > {output.kbs}
-        samtools view -b {input.tair10} {input.region_tair10} > {output.tair10}
+        samtools view -b {input.kbs} contig1:900000-950000 > {output.kbs}
+        samtools view -b {input.tair10} 1:16851824-16891823 > {output.tair10}
         samtools index {output.kbs}
         samtools index {output.tair10}
         """
