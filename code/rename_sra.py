@@ -14,4 +14,4 @@ with open(sys.argv[1], "r") as infile:
 files = glob("*_npq.bam*")
 for i in files:
     sra = i.split("_")[0]
-    os.rename(i, names[sra] + i.strip(sra)[1])
+    os.rename(i, names[sra] + i.strip(sra))
