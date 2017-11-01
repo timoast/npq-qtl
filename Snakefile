@@ -161,7 +161,7 @@ rule region:
         tair10_bg="ProcessedData/{sample}/{sample}_tair10_npq.bg"
     shell:
         """
-        samtools view -b {input.kbs_bam} contig1:900000-950000 > {output.kbs_bam}
+        samtools view -b {input.kbs_bam} contig30:900000-950000 > {output.kbs_bam}
         samtools view -b {input.tair10_bam} 1:16851824-16891823 > {output.tair10_bam}
         samtools index {output.kbs_bam}
         samtools index {output.tair10_bam}
