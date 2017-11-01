@@ -6,7 +6,7 @@ samples = [x.rsplit()[0] for x in open("./RawData/accession_sra.tsv", "r")]
 rule all:
     """ Map all """
     input:
-        expand("ProcessedData/{sample}/{sample}_kbs_npq.bw", sample=samples),
+        expand("ProcessedData/{sample}/{sample}_kbs_npq.bg", sample=samples),
 
 rule download:
     """ download data from SRA """
@@ -130,35 +130,42 @@ rule index:
         samtools index {input.tair10}
         """
 
+rule coverage:
+    """ compute coverage over NPQ region """
+    input:
+        kbs="ProcessedData/{sample}/{sample}_kbs.bam",
+        tair10="ProcessedData/{sample}/{sample}_tair10.bam"
+    output:
+        kbs="ProcessedData/{sample}/{sample}_kbs.bg",
+        tair10="ProcessedData/{sample}/{sample}_tair10.bg"
+    threads: 20
+    shell:
+        """
+        bamCoverage -b {input.kbs} -o {output.kbs} -p {threads} --normalizeUsingRPKM -of bedgraph
+        bamCoverage -b {input.tair10} -o {output.tair10} -p {threads} --normalizeUsingRPKM -of bedgraph
+        """
+
 rule region:
     """ extract the NPQ region """
     input:
         "ProcessedData/{sample}/{sample}_kbs.bam.bai",
         "ProcessedData/{sample}/{sample}_tair10.bam.bai",
-        kbs="ProcessedData/{sample}/{sample}_kbs.bam",
-        tair10="ProcessedData/{sample}/{sample}_tair10.bam"
+        kbs_bg="ProcessedData/{sample}/{sample}_kbs.bg",
+        tair10_bg="ProcessedData/{sample}/{sample}_tair10.bg",
+        kbs_bam="ProcessedData/{sample}/{sample}_kbs.bam",
+        tair10_bam="ProcessedData/{sample}/{sample}_tair10.bam"
     output:
-        kbs="ProcessedData/{sample}/{sample}_kbs_npq.bam",
-        tair10="ProcessedData/{sample}/{sample}_tair10_npq.bam"
+        kbs_bam="ProcessedData/{sample}/{sample}_kbs_npq.bam",
+        tair10_bam="ProcessedData/{sample}/{sample}_tair10_npq.bam",
+        kbs_bg="ProcessedData/{sample}/{sample}_kbs_npq.bg",
+        tair10_bg="ProcessedData/{sample}/{sample}_tair10_npq.bg"
     shell:
         """
-        samtools view -b {input.kbs} contig1:900000-950000 > {output.kbs}
-        samtools view -b {input.tair10} 1:16851824-16891823 > {output.tair10}
-        samtools index {output.kbs}
-        samtools index {output.tair10}
-        """
+        samtools view -b {input.kbs_bam} contig1:900000-950000 > {output.kbs_bam}
+        samtools view -b {input.tair10_bam} 1:16851824-16891823 > {output.tair10_bam}
+        samtools index {output.kbs_bam}
+        samtools index {output.tair10_bam}
 
-rule coverage:
-    """ compute coverage over NPQ region """
-    input:
-        kbs="ProcessedData/{sample}/{sample}_kbs_npq.bam",
-        tair10="ProcessedData/{sample}/{sample}_tair10_npq.bam"
-    output:
-        kbs="ProcessedData/{sample}/{sample}_kbs_npq.bw",
-        tair10="ProcessedData/{sample}/{sample}_tair10_npq.bw"
-    threads: 20
-    shell:
-        """
-        bamCoverage -b {input.kbs} -o {output.kbs} -p {threads}
-        bamCoverage -b {input.tair10} -o {output.tair10} -p {threads}
+        bedtools intersect -a {input.kbs_bg} -b contig1:900000-950000 > {output.kbs_bg}
+        bedtools intersect -a {input.tair10_bg} -b 1:16851824-16891823 > {output.tair10_bg}
         """
