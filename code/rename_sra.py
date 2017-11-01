@@ -11,7 +11,7 @@ with open(sys.argv[1], "r") as infile:
         line = line.rsplit()
         names[line[0]] = line[2]
 
-files = glob("*_npq.bam*")
+files = glob("*_npq*")
 for i in files:
     sra = i.split("_")[0]
     os.rename(i, names[sra] + i.strip(sra))
