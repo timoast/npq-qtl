@@ -100,8 +100,8 @@ rule sort:
     threads: 20
     shell:
         """
-        samtools sort -@ {threads} -T temp -O bam {input.kbs} -o {output.kbs}
-        samtools sort -@ {threads} -T temp -O bam {input.tair10} -o {output.tair10}
+        samtools sort -@ {threads} -O bam {input.kbs} > {output.kbs}
+        samtools sort -@ {threads} -O bam {input.tair10} > {output.tair10}
         """
 
 rule cleanup:
