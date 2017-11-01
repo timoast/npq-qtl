@@ -116,9 +116,25 @@ rule cleanup:
         rm {input.kbs} {input.tair10}
         """
 
+rule index:
+    """ index bam files """
+    input:
+        kbs="ProcessedData/{sample}/{sample}_kbs.bam",
+        tair10="ProcessedData/{sample}/{sample}_tair10.bam"
+    output:
+        kbs="ProcessedData/{sample}/{sample}_kbs.bam.bai",
+        tair10="ProcessedData/{sample}/{sample}_tair10.bam.bai"
+    shell:
+        """
+        samtools index {input.kbs}
+        samtools index {input.tair10}
+        """
+
 rule region:
     """ extract the NPQ region """
     input:
+        "ProcessedData/{sample}/{sample}_kbs.bam.bai",
+        "ProcessedData/{sample}/{sample}_tair10.bam.bai",
         region_kbs="RawData/npq_kbs.bed",
         region_tair10="RawData/npq_tair10.bed",
         kbs="ProcessedData/{sample}/{sample}_kbs.bam",
@@ -130,6 +146,8 @@ rule region:
         """
         samtools view -b {input.kbs} {input.region_kbs} > {output.kbs}
         samtools view -b {input.tair10} {input.region_tair10} > {output.tair10}
+        samtools index {output.kbs}
+        samtools index {output.tair10}
         """
 
 rule coverage:
